@@ -5,6 +5,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static("public"));
 
 var tasks=[];
+var works=[];
 
 app.get("/",function(req,res){
     var today=new Date();
@@ -16,14 +17,27 @@ app.get("/",function(req,res){
         day="weekday";
     } 
 
-    res.render("list",{knowtheDay:day,tasks:tasks});
+    res.render("list",{title:day,newItems:tasks});
 });
 
 app.post("/",function(req,res){
     var task=req.body.task;
-    tasks.push(task);
-    res.redirect("/");
+
+    if(req.body.list==="Work"){
+        works.push(task);
+        res.redirect("/work");
+    }
+    else{
+        tasks.push(task);
+        res.redirect("/");
+    }
 });
+
+app.get("/work",function(req,res){
+    res.render("list",{title:"Work",newItems:works});
+});
+
+
 
 app.listen(3000,function(){
 

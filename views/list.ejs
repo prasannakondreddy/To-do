@@ -9,22 +9,22 @@
 </head>
 <body>
     <div class="box" id="heading">
-    <h1> Its a <%= knowtheDay %></h1>
+    <h1> Its a <%= title %></h1>
     </div>
 
     <div class="box">
         
-    
-        <div class="item">
-            <%for(i=0;i<tasks.length;i++){%>
+        <%for(i=0;i<newItems.length;i++){%>
+            <div class="item">
                 <input type="checkbox">
-                <p><%= tasks[i]%></p>
-            <%}%>
-        </div>
+                <p><%= newItems[i]%></p>
+            </div>
+        <%}%>
+        
 
         <form action="/" method="POST" class="item">
             <input type="text" name="task" placeholder="Add a task" autocomplete="off">
-            <button type="submit" name="submit">+</button>
+            <button type="submit" name="list" value="<%= title %>">+</button>
         </form>
     
     </div>
