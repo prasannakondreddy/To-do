@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost:27017/todolistdb", {
     useUnifiedTopology: true,
     useNewUrlParser: true,
+    
 });
 
 app.set('view engine', 'ejs');
@@ -63,14 +64,25 @@ app.post("/", function (req, res) {
     
 });
 
+app.post("/delete",function(req,res){
+    const delitem=req.body.delItem;
+    
+    Item.findByIdAndRemove(delitem,function(err){
+        if(err)console.log(err);
+        else {
+            console.log("deleted");
+            res.redirect("/");
+        }
+    });
+});
+
+
 app.get("/work", function (req, res) {
     res.render("list", {
         title: "Work",
         newItems: works
     });
 });
-
-
 
 app.listen(3000, function () {
 
