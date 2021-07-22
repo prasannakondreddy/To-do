@@ -2,26 +2,46 @@ const express=require("express");
 const app=express();
 const mongoose=require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/todolistdb");
+mongoose.connect("mongodb://localhost:27017/todolistdb",{useUnifiedTopology: true, useNewUrlParser: true ,});
 
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended:true}));
 app.use(express.static("public"));
 
+const itemsSchema = new mongoose.Schema({
+    name:String
+});
+
+const Item= mongoose.model("Item",itemsSchema);
+
+const task1= new Item({name:"secion-27"});
+const task2=new Item({name:"Binary trees"});
+
+Item.insertMany([task1,task2],function(err){
+    if(err){
+        console.log(err);
+    }
+    else{
+        console.log("success!")
+    }
+});
+
+
+
 var tasks=[];
 var works=[];
 
 app.get("/",function(req,res){
-    var today=new Date();
-    var day="";
-    if(today.getDay==6||today.getDay==0 ){
-        day="weekend";
-    }
-    else{
-        day="weekday";
-    } 
+    Item.find({},function(err,result){
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.render("list",{title:"Today",newItems:result});
+        }
+    });
 
-    res.render("list",{title:day,newItems:tasks});
+    
 });
 
 app.post("/",function(req,res){
