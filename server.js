@@ -27,7 +27,7 @@ const task2 = new Item({
     name: "Explore"
 });
 const task3 = new Item({
-    name:"Keep Learning"
+    name:"Keep Learning!"
 });
 
 
@@ -36,6 +36,14 @@ const task3 = new Item({
 var works=[]; */
 
 app.get("/", function (req, res) {
+    var today=new Date();
+    var options = {
+        weekday:"long",
+        day:"numeric",
+        month:"long"
+    };
+    var day= today.toLocaleDateString("en-US",options);
+
     Item.find({}, function (err, result) {
         if (result.length === 0) {
             Item.insertMany([task1, task2 ,task3], function (err) {
@@ -48,7 +56,7 @@ app.get("/", function (req, res) {
             res.redirect("/");
         } else {
             res.render("list", {
-                title: "Today",
+                title: day,
                 newItems: result
             });
         }
