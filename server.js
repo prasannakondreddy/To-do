@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/todolistdb", {
+mongoose.connect("mongodb+srv://admin-Prasanna:Prasanna@cluster0.pimux.mongodb.net/todolistdb", {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     
