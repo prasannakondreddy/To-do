@@ -1,68 +1,80 @@
-const express=require("express");
-const app=express();
-const mongoose=require("mongoose");
+const express = require("express");
+const app = express();
+const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/todolistdb",{useUnifiedTopology: true, useNewUrlParser: true ,});
+mongoose.connect("mongodb://localhost:27017/todolistdb", {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+});
 
 app.set('view engine', 'ejs');
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({
+    extended: true
+}));
 app.use(express.static("public"));
 
 const itemsSchema = new mongoose.Schema({
-    name:String
+    name: String
 });
 
-const Item= mongoose.model("Item",itemsSchema);
+const Item = mongoose.model("Item", itemsSchema);
 
-const task1= new Item({name:"secion-27"});
-const task2=new Item({name:"Binary trees"});
-
-Item.insertMany([task1,task2],function(err){
-    if(err){
-        console.log(err);
-    }
-    else{
-        console.log("success!")
-    }
+const task1 = new Item({
+    name: "secion-27"
+});
+const task2 = new Item({
+    name: "Binary trees"
 });
 
 
 
-var tasks=[];
-var works=[];
+/* var tasks=[];
+var works=[]; */
 
-app.get("/",function(req,res){
-    Item.find({},function(err,result){
-        if(err){
-            console.log(err);
+app.get("/", function (req, res) {
+    Item.find({}, function (err, result) {
+        if (result.length === 0) {
+            Item.insertMany([task1, task2], function (err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("success!")
+                }
+            });
+            res.redirect("/");
         }
-        else{
-            res.render("list",{title:"Today",newItems:result});
-        }
+        else{res.render("list", {
+            title: "Today",
+            newItems: result
+        });
+}
+        
     });
 
-    
+
 });
 
-app.post("/",function(req,res){
-    var task=req.body.task;
+app.post("/", function (req, res) {
+    var task = req.body.task;
 
-    if(req.body.list==="Work"){
+    if (req.body.list === "Work") {
         works.push(task);
         res.redirect("/work");
-    }
-    else{
+    } else {
         tasks.push(task);
         res.redirect("/");
     }
 });
 
-app.get("/work",function(req,res){
-    res.render("list",{title:"Work",newItems:works});
+app.get("/work", function (req, res) {
+    res.render("list", {
+        title: "Work",
+        newItems: works
+    });
 });
 
 
 
-app.listen(3000,function(){
+app.listen(3000, function () {
 
 });
