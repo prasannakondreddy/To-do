@@ -20,10 +20,13 @@ const itemsSchema = new mongoose.Schema({
 const Item = mongoose.model("Item", itemsSchema);
 
 const task1 = new Item({
-    name: "secion-27"
+    name: "Hydrate"
 });
 const task2 = new Item({
-    name: "Binary trees"
+    name: "Explore"
+});
+const task3 = new Item({
+    name:"Keep Learning"
 });
 
 
@@ -34,7 +37,7 @@ var works=[]; */
 app.get("/", function (req, res) {
     Item.find({}, function (err, result) {
         if (result.length === 0) {
-            Item.insertMany([task1, task2], function (err) {
+            Item.insertMany([task1, task2 ,task3], function (err) {
                 if (err) {
                     console.log(err);
                 } else {
@@ -42,28 +45,22 @@ app.get("/", function (req, res) {
                 }
             });
             res.redirect("/");
+        } else {
+            res.render("list", {
+                title: "Today",
+                newItems: result
+            });
         }
-        else{res.render("list", {
-            title: "Today",
-            newItems: result
-        });
-}
-        
     });
-
-
 });
 
 app.post("/", function (req, res) {
-    var task = req.body.task;
+    const task = req.body.task;
 
-    if (req.body.list === "Work") {
-        works.push(task);
-        res.redirect("/work");
-    } else {
-        tasks.push(task);
-        res.redirect("/");
-    }
+    const item = new Item({name:task});
+    item.save();
+    res.redirect("/");
+    
 });
 
 app.get("/work", function (req, res) {
