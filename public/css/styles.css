@@ -1,6 +1,6 @@
 html {
   background-color: #9CC3D5FF;
-  background-image: -webkit-linear-gradient(75deg, #0063B2FF 50%, #9CC3D5FF 50%);
+  background-image: -webkit-linear-gradient(75deg, #0063B2FF 50%, rgb(221, 234, 241) 50%);
   min-height: 1000px;
   font-family: 'Montserrat', sans-serif;
 }
